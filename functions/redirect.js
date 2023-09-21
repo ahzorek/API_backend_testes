@@ -9,5 +9,5 @@ exports.handler = async (event, context) => {
   return {
     statusCode,
     headers,
-  };
-};
+  }
+}

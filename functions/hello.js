@@ -4,7 +4,7 @@ const headers = {
 }
 
 exports.handler = async (event, context) => {
-  console.log(event)
+  // console.log(event)
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 500,
