@@ -1,6 +1,14 @@
 require('dotenv').config()
 
 exports.handler = async (event, context) => {
+
+  if (event.httpMethod !== 'POST') {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: 'Ação não permitida. Método deve ser post'})
+    }
+  }
+
   let statusCode = 200
   let res, jobID, status, timesRunning = 0
   const API_KEY = process.env.PRODIA_API
