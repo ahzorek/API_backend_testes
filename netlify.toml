@@ -1,4 +1,12 @@
 # netlify.toml
-[build]
-  functions = "functions"
 
+[build]
+  command = "astro build"
+  functions = "functions"
+  publish = "dist"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+  force = true

@@ -1,0 +1,42 @@
+---
+interface Props {
+	title: string;
+	href: string;
+	methods: string;
+	status: string;
+	body: string;
+}
+
+const { href, title, methods, status, body } = Astro.props;
+
+const statusPillStyles = "text-white p-1.5 rounded-lg";
+let statusPill;
+
+switch (status) {
+	case "working":
+		statusPill = `bg-green-500 ${statusPillStyles}`;
+		break;
+	case "failing":
+		statusPill = `bg-red-500 ${statusPillStyles}`;
+		break;
+	case "development":
+		statusPill = `bg-yellow-500 ${statusPillStyles}`;
+		break;
+	default:
+		statusPill = `bg-gray-600 ${statusPillStyles}`;
+}
+---
+
+<li style="display: contents;">
+	<a href={href}>
+		<div class="bg-white rounded-lg shadow-lg p-4 h-full">
+			<h2 class="text-xl font-semibold mb-2">{title}</h2>
+			<p class="text-gray-500 mb-2">{body}</p>
+			<p class="text-gray-500 mb-2">Endpoint: {href}</p>
+			<pre class="bg-gray-200 p-2 rounded">{methods}</pre>
+			<p class="text-gray-500 my-4">
+				<span class={statusPill}>{status}</span>
+			</p>
+		</div>
+	</a>
+</li>

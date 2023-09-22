@@ -1,0 +1,31 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CardApi from "../components/Card.astro";
+
+const allApis = await Astro.glob("../content/apis/*.md");
+---
+
+<Layout title="APIs Testes (Index com Astro)">
+	<div class="container mx-auto">
+		<div class="text-center mb-6">
+			<h1 class="text-3xl font-semibold">APIs - Testes</h1>
+			<p class="text-gray-600">
+				Algumas APIs, usando Netlify serverless functions, como teste de
+				conceito
+			</p>
+		</div>
+		<ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{
+				allApis.map((api) => (
+					<CardApi
+						href={api.frontmatter.href}
+						title={api.frontmatter.title}
+						methods={api.frontmatter.methods}
+						status={api.frontmatter.status}
+						body={api.frontmatter.body}
+					/>
+				))
+			}
+		</ul>
+	</div>
+</Layout>
