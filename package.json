@@ -3,8 +3,8 @@
   "version": "1.0.2",
   "description": "",
   "scripts": {
-    "functions": "netlify dev",
-    "dev": "astro dev",
+    "dev": "netlify dev",
+    "astro-dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
