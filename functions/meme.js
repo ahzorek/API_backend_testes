@@ -5,14 +5,14 @@ exports.handler = async (event, context) => {
   const diretorioImagens = 'public/images'
   if (event.httpMethod !== 'GET') {
     return {
-      statusCode: 500,
+      statusCode: 400,
       headers,
       body: 'ERROR: Não pode realizar ação'
     }
   } else try {
     // lê o diretório de imagens
     const imagens = fs.readdirSync(diretorioImagens)
-    
+
     // filtra arquivos de imagem e empurra pra dentro da array
     const imagensFiltradas = imagens.filter((imagem) => {
       const extensao = path.extname(imagem).toLowerCase()
@@ -33,12 +33,12 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers,
       body: randMeme.toString('base64'), // Converte os bytes em base64
-      isBase64Encoded: true, 
+      isBase64Encoded: true,
     };
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Erro ao obter a imagem aleatória' }),
+      body: JSON.stringify({ error: 'Erro ao processar' }),
     }
   }
 }

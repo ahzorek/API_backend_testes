@@ -2,6 +2,8 @@
 .netlify
 .DS_Store
 
+response_codes.txt
+
 # build output
 dist/
 

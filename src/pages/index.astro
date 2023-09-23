@@ -3,6 +3,24 @@ import Layout from "../layouts/Layout.astro";
 import CardApi from "../components/Card.astro";
 
 const allApis = await Astro.glob("../content/apis/*.md");
+console.log(`PRIMEIRO LOG`);
+
+console.table(allApis);
+
+function compararPorData(a, b) {
+	const dataA: any = new Date(
+		a.frontmatter.updatedAt.replace(/(\d{2})\/(\d{2})\/(\d{2})/, "20$3-$2-$1"),
+	);
+	const dataB: any = new Date(
+		b.frontmatter.updatedAt.replace(/(\d{2})\/(\d{2})\/(\d{2})/, "20$3-$2-$1"),
+	);
+	return dataA - dataB;
+}
+
+let allApisSorted = allApis.sort(compararPorData);
+console.log(`SEGUNDO LOG`);
+
+console.table(allApisSorted);
 ---
 
 <Layout title="APIs Testes (Index com Astro)">
