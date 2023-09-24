@@ -1,0 +1,119 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const primaryButton =
+	"focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800";
+const secondaryButton =
+	"text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800";
+---
+
+<Layout title="Converter WebP para PNG">
+	<div class="container mx-auto">
+		<div class="text-left mb-6">
+			<h1 class="text-3xl font-semibold">Converter WebP para PNG</h1>
+			<div
+				id="dropzone"
+				class="my-8 text-center p-10 border-dashed border-2 border-gray-400 rounded-xl"
+			>
+				Solte a imagem WebP aqui
+			</div>
+			<p class="my-4 flex-col" id="file-info"></p>
+			<button class={primaryButton} id="convert-button" style="display: none;"
+				>Converter</button
+			>
+			<div class="my-6" id="result" style="display: none;">
+				<h2>Resultado da Conversão</h2>
+				<p>A imagem WebP foi convertida para PNG:</p>
+				<img class="my-6" id="png-image" src="" alt="Imagem PNG" />
+				<button
+					class={secondaryButton}
+					id="download-button"
+					style="display: none;">Baixar PNG</button
+				>
+			</div>
+
+			<script>
+				const dropzone = document.getElementById("dropzone");
+				const fileInfo = document.getElementById("file-info");
+				const convertButton = document.getElementById("convert-button");
+				const resultDiv = document.getElementById("result");
+				const pngImage = document.getElementById("png-image");
+				const downloadButton = document.getElementById("download-button");
+
+				dropzone.addEventListener("dragover", (e) => {
+					e.preventDefault();
+					dropzone.style.border = "2px dashed #333";
+				});
+
+				dropzone.addEventListener("dragleave", () => {
+					dropzone.style.border = "2px dashed #ccc";
+				});
+
+				dropzone.addEventListener("drop", async (e) => {
+					e.preventDefault();
+					dropzone.style.border = "2px dashed #ccc";
+
+					const file = e.dataTransfer.files[0];
+
+					if (file && file.type === "image/webp") {
+						fileInfo.innerHTML = `
+                    Nome do arquivo: ${file.name}<br>
+                    Tipo do arquivo: ${file.type}<br>
+                    Tamanho do arquivo: ${(file.size / 1000).toFixed(
+											2,
+										)} kilobytes
+                `;
+						convertButton.style.display = "block";
+
+						const reader = new FileReader();
+
+						reader.onload = async (e) => {
+							const base64Image = e.target.result.split(",")[1];
+							// Remova a parte "data:image/webp;base64,"
+
+							convertButton.addEventListener("click", async () => {
+								const URL = "/api/webpToPng/";
+								const response = await fetch(URL, {
+									method: "POST",
+									body: JSON.stringify({ image: base64Image }),
+									headers: {
+										"Content-Type": "application/json",
+									},
+								});
+
+								if (response.ok) {
+									const responseData = await response.json(); // Processar a resposta como JSON
+									const pngImageBase64 = responseData.pngImageBase64;
+									const nomeSemExtensao = file.name.replace(/\.webp$/, "");
+									resultDiv.style.display = "block";
+									pngImage.src = "data:image/png;base64," + pngImageBase64;
+
+									// Exiba o botão de download
+									downloadButton.style.display = "block";
+
+									// Lidar com o clique no botão de download
+									downloadButton.addEventListener("click", () => {
+										// Crie um elemento de link temporário para o download
+										const a = document.createElement("a");
+										a.href = "data:image/png;base64," + pngImageBase64;
+										a.download = `${nomeSemExtensao}_converted.png`; // Nome do arquivo para download
+										document.body.appendChild(a);
+										a.click();
+										document.body.removeChild(a);
+									});
+								} else {
+									console.error("Erro na conversão:", response.statusText);
+								}
+							});
+						};
+
+						reader.readAsDataURL(file);
+					} else {
+						fileInfo.textContent =
+							"Por favor, selecione um arquivo WebP válido.";
+					}
+				});
+			</script>
+		</div>
+	</div>
+</Layout>

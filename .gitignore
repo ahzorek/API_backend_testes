@@ -22,3 +22,8 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+
+## other stuff
+
+.webtopng.html
+webtopng.html
