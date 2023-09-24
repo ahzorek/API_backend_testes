@@ -3,7 +3,8 @@ const sharp = require('sharp');
 const headers = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
-  "Access-Control-Allow-Methods": "POST"
+  "Access-Control-Allow-Methods": "POST",
+  "Content-Type": "application/json"
 }
 
 exports.handler = async (event) => {
@@ -11,10 +12,8 @@ exports.handler = async (event) => {
     return {
       statusCode: 405,
       body: JSON.stringify({ error: 'Método não permitido', message: 'Este endpoint só suporta solicitações POST.' }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
+      ...headers
+    }
   }
   try {
     const webpImageBase64 = JSON.parse(event.body).image
@@ -30,9 +29,8 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({ pngImageBase64 }),
       headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      },
+        ...headers
+      }
     }
   } catch (error) {
     console.error(error)

@@ -2,34 +2,49 @@
 import Layout from "../layouts/Layout.astro";
 
 const primaryButton =
-	"focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800";
+	"focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 place-items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800";
 const secondaryButton =
-	"text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800";
+	"text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 place-items-center grow order-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800";
+const terciaryButton =
+	"text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm order-2 px-5 py-2.5 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700";
 ---
 
 <Layout title="Converter WebP para PNG">
 	<div class="container mx-auto">
-		<div class="text-left mb-6">
+		<div class="text-center mb-6 grid place-items-center">
 			<h1 class="text-3xl font-semibold">Converter WebP para PNG</h1>
 			<div
 				id="dropzone"
-				class="my-8 text-center p-10 border-dashed border-2 border-gray-400 rounded-xl"
+				class="my-8 min-w-[60vw] text-center flex-col p-10 border-dashed border-2 border-gray-400 rounded-xl"
 			>
-				Solte a imagem WebP aqui
+				<i class="fa-regular fa-file-image fill-slate-400 fa-2xl my-6"></i>
+				<div>Solte a imagem WebP aqui</div>
 			</div>
 			<p class="my-4 flex-col" id="file-info"></p>
-			<button class={primaryButton} id="convert-button" style="display: none;"
-				>Converter</button
+			<button class={primaryButton} id="convert-button" style="display: none;">
+				<span>Converter</span> <i class="fa-solid fa-play m-2"></i></button
 			>
-			<div class="my-6" id="result" style="display: none;">
+			<div class="my-6 flex-col" id="result" style="display: none;">
 				<h2>Resultado da Conversão</h2>
-				<p>A imagem WebP foi convertida para PNG:</p>
-				<img class="my-6" id="png-image" src="" alt="Imagem PNG" />
-				<button
-					class={secondaryButton}
-					id="download-button"
-					style="display: none;">Baixar PNG</button
-				>
+				<p>A imagem WebP foi convertida para PNG</p>
+				<img
+					class="mx-auto my-6 h-[40vh] w-[40vh] object-cover rounded-lg overflow-hidden shadow-md hover:shadow-lg"
+					id="png-image"
+					src=""
+					alt="Imagem PNG"
+				/>
+				<div id="buttons-wrapper" class="flex gap-2">
+					<button class={terciaryButton} id="reset-button" type="reset">
+						Limpar
+					</button>
+					<button
+						class=`${secondaryButton} items-center justify-center self-center`
+						id="download-button"
+					>
+						<span>Salvar Arquivo</span>
+						<i class="fa-solid fa-file-arrow-down fa-lg m-2"></i>
+					</button>
+				</div>
 			</div>
 
 			<script>
@@ -39,6 +54,7 @@ const secondaryButton =
 				const resultDiv = document.getElementById("result");
 				const pngImage = document.getElementById("png-image");
 				const downloadButton = document.getElementById("download-button");
+				const resetButton = document.getElementById("reset-button");
 
 				dropzone.addEventListener("dragover", (e) => {
 					e.preventDefault();
@@ -56,6 +72,7 @@ const secondaryButton =
 					const file = e.dataTransfer.files[0];
 
 					if (file && file.type === "image/webp") {
+						dropzone.style.display = "none";
 						fileInfo.innerHTML = `
                     Nome do arquivo: ${file.name}<br>
                     Tipo do arquivo: ${file.type}<br>
@@ -63,13 +80,12 @@ const secondaryButton =
 											2,
 										)} kilobytes
                 `;
-						convertButton.style.display = "block";
+						convertButton.style.display = "flex";
 
 						const reader = new FileReader();
 
 						reader.onload = async (e) => {
 							const base64Image = e.target.result.split(",")[1];
-							// Remova a parte "data:image/webp;base64,"
 
 							convertButton.addEventListener("click", async () => {
 								const URL = "/api/webpToPng/";
@@ -82,25 +98,26 @@ const secondaryButton =
 								});
 
 								if (response.ok) {
-									const responseData = await response.json(); // Processar a resposta como JSON
+									const responseData = await response.json();
 									const pngImageBase64 = responseData.pngImageBase64;
 									const nomeSemExtensao = file.name.replace(/\.webp$/, "");
-									resultDiv.style.display = "block";
+									resultDiv.style.display = "flex";
 									pngImage.src = "data:image/png;base64," + pngImageBase64;
 
-									// Exiba o botão de download
-									downloadButton.style.display = "block";
+									downloadButton.style.display = "flex";
 
-									// Lidar com o clique no botão de download
 									downloadButton.addEventListener("click", () => {
-										// Crie um elemento de link temporário para o download
 										const a = document.createElement("a");
 										a.href = "data:image/png;base64," + pngImageBase64;
-										a.download = `${nomeSemExtensao}_converted.png`; // Nome do arquivo para download
+										a.download = `${nomeSemExtensao}_converted.png`;
 										document.body.appendChild(a);
 										a.click();
 										document.body.removeChild(a);
 									});
+
+									resetButton.addEventListener("click", () =>
+										location.reload(),
+									);
 								} else {
 									console.error("Erro na conversão:", response.statusText);
 								}
@@ -109,6 +126,7 @@ const secondaryButton =
 
 						reader.readAsDataURL(file);
 					} else {
+						convertButton.style.display = "none";
 						fileInfo.textContent =
 							"Por favor, selecione um arquivo WebP válido.";
 					}
