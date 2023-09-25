@@ -1,4 +1,4 @@
-const sharp = require('sharp');
+const sharp = require('sharp')
 
 const headers = {
   "Access-Control-Allow-Origin": "*",
@@ -16,7 +16,8 @@ exports.handler = async (event) => {
     }
   }
   try {
-    const webpImageBase64 = JSON.parse(event.body).image
+    //const webpImageHeader = JSON.parse(event.body).image.split(",")[0]
+    const webpImageBase64 = JSON.parse(event.body).image.split(",")[1]
     const webpImageBuffer = Buffer.from(webpImageBase64, 'base64')
 
     const pngImageBuffer = await sharp(webpImageBuffer)
@@ -24,10 +25,12 @@ exports.handler = async (event) => {
       .toBuffer()
 
     const pngImageBase64 = pngImageBuffer.toString('base64')
+    const pngImageHeader = "data:image/png;base64,"
+    const fullImageReturn = pngImageHeader + pngImageBase64
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ pngImageBase64 }),
+      body: JSON.stringify({ fullImageReturn }),
       headers: {
         ...headers
       }

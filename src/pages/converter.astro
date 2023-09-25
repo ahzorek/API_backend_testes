@@ -85,7 +85,7 @@ const terciaryButton =
 						const reader = new FileReader();
 
 						reader.onload = async (e) => {
-							const base64Image = e.target.result.split(",")[1];
+							const base64Image = e.target.result;
 
 							convertButton.addEventListener("click", async () => {
 								const URL = "/api/webpToPng/";
@@ -99,20 +99,20 @@ const terciaryButton =
 
 								if (response.ok) {
 									const responseData = await response.json();
-									const pngImageBase64 = responseData.pngImageBase64;
+									const pngImageBase64 = responseData.fullImageReturn;
 									const nomeSemExtensao = file.name.replace(/\.webp$/, "");
 									resultDiv.style.display = "flex";
-									pngImage.src = "data:image/png;base64," + pngImageBase64;
+									pngImage.src = pngImageBase64;
 
 									downloadButton.style.display = "flex";
 
 									downloadButton.addEventListener("click", () => {
 										const a = document.createElement("a");
-										a.href = "data:image/png;base64," + pngImageBase64;
+										a.href = pngImageBase64;
 										a.download = `${nomeSemExtensao}_converted.png`;
 										document.body.appendChild(a);
 										a.click();
-										document.body.removeChild(a);
+										// document.body.removeChild(a);
 									});
 
 									resetButton.addEventListener("click", () =>
