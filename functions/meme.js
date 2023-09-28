@@ -1,6 +1,8 @@
 const axios = require('axios')
 
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
+  //console.log('I NEED TO TAKE A LOOK AT THIS::::', event)
+
   if (event.httpMethod !== 'GET') {
     return {
       statusCode: 405,
@@ -10,8 +12,9 @@ exports.handler = async (event, context) => {
   } else try {
     // lê o diretório de imagens
     const memeList = require('../public/images.json')
-    const baseUrlPath = event.headers.referer
+    const baseUrlPath = event.rawUrl.split("api/meme")[0]
     const memesLength = memeList.length
+
 
     function randIndex(arrSize) {
       return Math.floor(Math.random() * arrSize)
