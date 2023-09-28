@@ -1,0 +1,38 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const primaryButton =
+	"focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 place-items-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800";
+const secondaryButton =
+	"text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 place-items-center grow order-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800";
+const terciaryButton =
+	"text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm order-2 px-5 py-2.5 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700";
+---
+
+<Layout title="MEME ALEATÓRIO">
+	<div class="container mx-auto">
+		<div class="text-center mb-6 grid place-items-center">
+			<h1 class="text-3xl font-semibold">Meme aleatório 😲😮😱😵</h1>
+			<div class="my-6 flex-col" id="result">
+				<h2>
+					Esse é um meme aleatório tirado diretamente da minha mesa. Enjoy it.
+				</h2>
+				<img
+					class="mx-auto my-6 h-[60vh] w-auto object-cover rounded-lg overflow-hidden shadow-md transition-shadow hover:shadow-lg"
+					id="png-image"
+					src="https://testing-apis.netlify.app/api/meme"
+					alt="Some meme or whatever"
+				/>
+				<div id="buttons-wrapper" class="flex gap-2">
+					<button class={terciaryButton} id="reset-button" type="reset">
+						Outro
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		const resetButton = document.getElementById("reset-button");
+		resetButton.addEventListener("click", () => location.reload());
+	</script>
+</Layout>
