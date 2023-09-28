@@ -28,7 +28,7 @@ const terciaryButton =
 				<h2>Resultado da Conversão</h2>
 				<p>A imagem WebP foi convertida para PNG</p>
 				<img
-					class="mx-auto my-6 h-[40vh] w-[40vh] object-cover rounded-lg overflow-hidden shadow-md hover:shadow-lg"
+					class="mx-auto my-6 h-[40vh] w-[40vh] object-cover rounded-lg overflow-hidden shadow-md transition-shadow hover:shadow-lg"
 					id="png-image"
 					src=""
 					alt="Imagem PNG"
@@ -112,7 +112,7 @@ const terciaryButton =
 										a.download = `${nomeSemExtensao}_converted.png`;
 										document.body.appendChild(a);
 										a.click();
-										// document.body.removeChild(a);
+										document.body.removeChild(a);
 									});
 
 									resetButton.addEventListener("click", () =>

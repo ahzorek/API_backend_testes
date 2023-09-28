@@ -9,8 +9,8 @@ interface Props {
 
 const { href, title, methods, status, body } = Astro.props;
 
-const statusPillStyles = "text-white p-1.5 rounded-lg";
 const disabledStatus = "pointer-events: none; opacity: 0.6; user-select: none";
+const statusPillStyles = "text-white p-1.5 rounded-lg";
 let statusPill;
 
 switch (status) {
@@ -34,7 +34,7 @@ switch (status) {
 <li style={`display: contents;`}>
 	<div
 		style={status === "killed" && disabledStatus}
-		class="bg-white rounded-lg shadow-lg p-4 h-full"
+		class="bg-white rounded-lg shadow-lg p-4 h-full transition-shadow"
 	>
 		<h2 class="text-xl font-semibold mb-2">{title}</h2>
 		<p class="text-gray-500 mb-2">{body}</p>

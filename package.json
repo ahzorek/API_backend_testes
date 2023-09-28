@@ -8,7 +8,9 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "git": "bash git.sh",
+    "deploy": "bash update_images.sh && bash git.sh"
   },
   "author": "andre",
   "license": "MIT",

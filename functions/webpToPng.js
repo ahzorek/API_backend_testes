@@ -4,7 +4,7 @@ const headers = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
   "Access-Control-Allow-Methods": "POST",
-  "Content-Type": "application/json"
+  "Content-Type": "application/json; charset=utf-8"
 }
 
 exports.handler = async (event) => {
