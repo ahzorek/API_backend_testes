@@ -1,10 +1,14 @@
 ---
+export const prerender = false;
 import "../styles/main.css";
 
 type Headline = {
 	title: string;
 	source: string;
 };
+
+const scrollableObjectStyle: string =
+	"no-underline uppercase mx-8 text-1xl font-bold whitespace-no-wrap relative";
 
 const response: any = await fetch(
 	"https://testing-apis.netlify.app/api/newsApi",
@@ -19,26 +23,23 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>News Ticker</title>
 	</head>
-	<body class="p-16 min-h-screen flex items-end bg-slate-500">
+	<body class="p-16 min-h-screen flex items-end">
 		<div class="w-full overflow-hidden bg-gray-100">
-			<ul id="scroller__inside" class="flex flex-row flex-no-wrap gap-8">
+			<ul
+				id="scroller__inside"
+				class="flex flex-row flex-no-wrap gap-8 shadow-md"
+			>
 				{
 					headlines.map(({ title, source }) => (
-						<li
-							title={source}
-							class="no-underline uppercase mx-5 my-2 text-3xl font-bold whitespace-no-wrap relative"
-						>
+						<li title={source} class={scrollableObjectStyle}>
 							{title}
 						</li>
 					))
 				}
+				<!-- duplica o conteudo para criar a animação infinita -->
 				{
 					headlines.map(({ title, source }) => (
-						<li
-							title={source}
-							class="no-underline uppercase mx-5 my-2 text-3xl font-bold whitespace-no-wrap relative"
-							aria-hidden="true"
-						>
+						<li title={source} class={scrollableObjectStyle} aria-hidden="true">
 							{title}
 						</li>
 					))
@@ -47,12 +48,17 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 		</div>
 	</body>
 	<style>
+		body {
+			background-image: url(https://source.unsplash.com/random/?news,newsroom,headlines);
+			background-size: cover;
+			backdrop-filter: blur(5px);
+		}
 		#scroller__inside {
-			padding: 2rem 0;
+			padding: 1rem 0;
 			width: max-content;
 			flex-wrap: nowrap;
 			cursor: none;
-			animation: scroll var(--_animation-duration, 245s)
+			animation: scroll var(--_animation-duration, 360s)
 				var(--_animation-direction, forwards) linear infinite;
 		}
 		@keyframes scroll {

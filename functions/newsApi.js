@@ -2,6 +2,7 @@ require('dotenv').config()
 
 
 const headers = {
+  'Cache': 'no-cache,  must-revalidate',
   'Content-Type': 'application/json; charset=utf-8',
   'Access-Control-Allow-Origin': '*'
 }
