@@ -4,8 +4,8 @@ exports.handler = async (event, context) => {
 
   if (event.httpMethod !== 'POST') {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ message: 'Ação não permitida. Método deve ser post'})
+      statusCode: 405,
+      body: JSON.stringify({ message: 'Ação não permitida. Método deve ser post' })
     }
   }
 
@@ -13,7 +13,7 @@ exports.handler = async (event, context) => {
   let res, jobID, status, timesRunning = 0
   const API_KEY = process.env.PRODIA_API
   const headers = {
-  'Content-Type': 'application/json; charset=utf-8',   
+    'Content-Type': 'application/json; charset=utf-8',
   }
 
   const options = {
@@ -32,29 +32,29 @@ exports.handler = async (event, context) => {
   await fetch('https://api.prodia.com/v1/sd/generate', options)
     .then(job_information => job_information.json())
     .then(job_information => {
-        jobID = job_information.job
-        console.log(job_information)
+      jobID = job_information.job
+      console.log(job_information)
     }).catch(err => console.error(err))
-  
+
   await new Promise(resolve => setTimeout(resolve, 6000))
 
   while (status !== 'succeeded' || timesRunning < 50) {
     timesRunning++
-    console.log('Running for the ' +  timesRunning + ':', status)
+    console.log('Running for the ' + timesRunning + ':', status)
     await fetch(`https://api.prodia.com/v1/job/${jobID}`, {
-        method: 'GET',
-        headers: {
-          accept: 'application/json',
-          'X-Prodia-Key': API_KEY
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        'X-Prodia-Key': API_KEY
       }
     }).then(response => response.json())
       .then(response => {
         status = response.status
         res = response
       })
-    .catch(err => console.error(err))
-    }
-  
+      .catch(err => console.error(err))
+  }
+
   return {
     statusCode,
     headers,

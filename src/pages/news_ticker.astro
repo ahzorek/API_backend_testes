@@ -1,0 +1,63 @@
+---
+import "../styles/main.css";
+
+type Headline = {
+	title: string;
+	source: string;
+};
+
+const response: any = await fetch(
+	"https://testing-apis.netlify.app/api/newsApi",
+);
+const { headlines }: { headlines: Array<Headline> } = await response.json();
+---
+
+<!doctype html>
+<html lang="pt=br">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>News Ticker</title>
+	</head>
+	<body class="p-16 min-h-screen flex items-end bg-slate-500">
+		<div class="w-full overflow-hidden bg-gray-100">
+			<ul id="scroller__inside" class="flex flex-row flex-no-wrap gap-8">
+				{
+					headlines.map(({ title, source }) => (
+						<li
+							title={source}
+							class="no-underline uppercase text-3xl font-bold whitespace-no-wrap relative"
+						>
+							{title}
+						</li>
+					))
+				}
+				{
+					headlines.map(({ title, source }) => (
+						<li
+							title={source}
+							class="no-underline uppercase text-3xl font-bold whitespace-no-wrap relative"
+							aria-hidden="true"
+						>
+							{title}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</body>
+	<style>
+		#scroller__inside {
+			padding: 2rem 0;
+			width: max-content;
+			flex-wrap: nowrap;
+			animation: scroll var(--_animation-duration, 245s)
+				var(--_animation-direction, forwards) linear infinite;
+		}
+		@keyframes scroll {
+			to {
+				transform: translate(calc(-50% - 1rem));
+			}
+		}
+	</style>
+</html>

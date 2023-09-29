@@ -15,7 +15,6 @@ exports.handler = async (event) => {
     const baseUrlPath = event.rawUrl.split("api/meme")[0]
     const memesLength = memeList.length
 
-
     function randIndex(arrSize) {
       return Math.floor(Math.random() * arrSize)
     }
@@ -37,7 +36,7 @@ exports.handler = async (event) => {
       'Content-Type': 'image/jpeg',
       body: stringifyidMeme,
       isBase64Encoded: true,
-    };
+    }
   } catch (error) {
     return {
       statusCode: 500,
