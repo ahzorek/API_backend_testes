@@ -26,7 +26,7 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 					headlines.map(({ title, source }) => (
 						<li
 							title={source}
-							class="no-underline uppercase text-3xl font-bold whitespace-no-wrap relative"
+							class="no-underline uppercase mx-5 my-2 text-3xl font-bold whitespace-no-wrap relative"
 						>
 							{title}
 						</li>
@@ -36,7 +36,7 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 					headlines.map(({ title, source }) => (
 						<li
 							title={source}
-							class="no-underline uppercase text-3xl font-bold whitespace-no-wrap relative"
+							class="no-underline uppercase mx-5 my-2 text-3xl font-bold whitespace-no-wrap relative"
 							aria-hidden="true"
 						>
 							{title}
@@ -51,6 +51,7 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 			padding: 2rem 0;
 			width: max-content;
 			flex-wrap: nowrap;
+			cursor: none;
 			animation: scroll var(--_animation-duration, 245s)
 				var(--_animation-direction, forwards) linear infinite;
 		}
