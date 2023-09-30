@@ -14,8 +14,9 @@ const scrollableObjectStyle: string =
 const response: any = await fetch(
 	"https://testing-apis.netlify.app/api/newsApiv2",
 );
-const { headlines }: { headlines: Array<Headline> } = await response.json();
-const AnimTimeSpan = (headlines.length / 20) * 360;
+const { headlines, size }: { headlines: Array<Headline>; size: number } =
+	await response.json();
+const AnimTimeSpan = (size / 20) * 360;
 ---
 
 <!doctype html>
