@@ -5,6 +5,7 @@ import "../styles/main.css";
 type Headline = {
 	title: string;
 	source: string;
+	href: string;
 };
 
 const scrollableObjectStyle: string =
@@ -30,17 +31,17 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 				class="flex flex-row flex-no-wrap gap-8 shadow-md"
 			>
 				{
-					headlines.map(({ title, source }) => (
+					headlines.map(({ title, source, href = "blank" }) => (
 						<li title={source} class={scrollableObjectStyle}>
-							{title}
+							<a href={href}>{title}</a>
 						</li>
 					))
 				}
 				<!-- duplica o conteudo para criar a animação infinita -->
 				{
-					headlines.map(({ title, source }) => (
+					headlines.map(({ title, source, href = "blank" }) => (
 						<li title={source} class={scrollableObjectStyle} aria-hidden="true">
-							{title}
+							<a href={href}>{title}</a>
 						</li>
 					))
 				}
@@ -57,7 +58,7 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 			padding: 1rem 0;
 			width: max-content;
 			flex-wrap: nowrap;
-			cursor: none;
+			cursor: pointer;
 			animation: scroll var(--_animation-duration, 360s)
 				var(--_animation-direction, forwards) linear infinite;
 		}
