@@ -12,7 +12,7 @@ const scrollableObjectStyle: string =
 	"no-underline uppercase mx-8 text-1xl font-bold whitespace-no-wrap relative";
 
 const response: any = await fetch(
-	"https://testing-apis.netlify.app/api/newsApi",
+	"https://testing-apis.netlify.app/api/newsApiv2",
 );
 const { headlines }: { headlines: Array<Headline> } = await response.json();
 ---
