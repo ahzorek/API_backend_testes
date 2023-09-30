@@ -15,6 +15,7 @@ const response: any = await fetch(
 	"https://testing-apis.netlify.app/api/newsApiv2",
 );
 const { headlines }: { headlines: Array<Headline> } = await response.json();
+const AnimTimeSpan = (headlines.length / 20) * 360;
 ---
 
 <!doctype html>
@@ -29,6 +30,7 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 			<ul
 				id="scroller__inside"
 				class="flex flex-row flex-no-wrap gap-8 shadow-md"
+				style={`animation: scroll ${AnimTimeSpan}s forwards linear infinite;`}
 			>
 				{
 					headlines.map(({ title, source, href = "blank" }) => (
@@ -59,8 +61,6 @@ const { headlines }: { headlines: Array<Headline> } = await response.json();
 			width: max-content;
 			flex-wrap: nowrap;
 			cursor: pointer;
-			animation: scroll var(--_animation-duration, 360s)
-				var(--_animation-direction, forwards) linear infinite;
 		}
 		@keyframes scroll {
 			to {

@@ -36,7 +36,10 @@ exports.handler = async (event, context) => {
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({ headlines })
+      body: JSON.stringify({
+        headlines,
+        size: headlines.length
+      })
     }
   }
 }
