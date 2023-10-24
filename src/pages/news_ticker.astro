@@ -1,5 +1,6 @@
 ---
 export const prerender = false;
+import ScrollingItem from "../components/ScrollingItem.astro";
 import "../styles/main.css";
 
 type Headline = {
@@ -8,12 +9,12 @@ type Headline = {
 	href: string;
 };
 
-const scrollableObjectStyle: string =
-	"no-underline uppercase mx-8 text-1xl font-bold whitespace-no-wrap relative";
+const API_URL =
+	process.env.NODE_ENV === "development"
+		? "http://localhost:8888/api/newsApiv2"
+		: "https://testing-apis.netlify.app/api/newsApiv2";
 
-const response: any = await fetch(
-	"https://testing-apis.netlify.app/api/newsApiv2",
-);
+const response: any = await fetch(API_URL);
 const { headlines, size }: { headlines: Array<Headline>; size: number } =
 	await response.json();
 const AnimTimeSpan = (size / 20) * 360;
@@ -34,18 +35,14 @@ const AnimTimeSpan = (size / 20) * 360;
 				style={`animation: scroll ${AnimTimeSpan}s forwards linear infinite;`}
 			>
 				{
-					headlines.map(({ title, source, href = "blank" }) => (
-						<li title={source} class={scrollableObjectStyle}>
-							<a href={href}>{title}</a>
-						</li>
+					headlines.map(({ title, source, href }) => (
+						<ScrollingItem title={title} source={source} href={href} />
 					))
 				}
-				<!-- duplica o conteudo para criar a animação infinita -->
+				<!-- esse segundo map duplica os itens o que cria o efeito de scroll infinito. a propriedade shadow define essa segunda iteração como aria-hidden=true -->
 				{
-					headlines.map(({ title, source, href = "blank" }) => (
-						<li title={source} class={scrollableObjectStyle} aria-hidden="true">
-							<a href={href}>{title}</a>
-						</li>
+					headlines.map(({ title, source, href }) => (
+						<ScrollingItem title={title} source={source} href={href} shadow />
 					))
 				}
 			</ul>
@@ -70,3 +67,13 @@ const AnimTimeSpan = (size / 20) * 360;
 		}
 	</style>
 </html>
+
+<!-- {
+				do{
+					headlines.map(({ title, source, href = "blank" }) => (
+						<li title={source} class={scrollableObjectStyle} aria-hidden={!firstRun}>
+							<a href={href}>{title}</a>
+						</li>
+					))
+				} while (firstRun);
+			} -->

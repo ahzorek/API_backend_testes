@@ -24,3 +24,5 @@ pnpm-debug.log*
 .env.production
 
 ## other stuff
+notes.txt
+__newsApiv2_1.ts

@@ -1,0 +1,17 @@
+---
+interface Props {
+	title: string;
+	href: string;
+	source: string;
+	shadow?: boolean;
+}
+
+const { href, title, source, shadow = false } = Astro.props;
+
+const scrollableObjectStyle: string =
+	"no-underline uppercase mx-8 text-1xl font-bold whitespace-no-wrap relative";
+---
+
+<li title={source} class={scrollableObjectStyle} aria-hidden={shadow}>
+	<a href={href}>{title}</a>
+</li>
